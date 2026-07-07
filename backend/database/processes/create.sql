@@ -94,7 +94,7 @@ create table divisions.division (
     country text,
     region text,
     class text,
-    hierarchies jsonb,
+    hierarchy jsonb,
     parent_id text,
     population integer,
     capitals jsonb,
@@ -123,4 +123,14 @@ create table divisions.division_area (
     )
 );
 
--- Para ejecutar: psql postgres -f database.sql
+/*
+* Esta sección se utilizará para añadir los índices que sean necesarios para la
+* ejecución de las diferentes funcionalidades que se esperan de la base de datos.
+**/
+
+-- Índice para la realización de operaciones espaciales en la tabla 'division_area'.
+create index if not exists idx_division_area_geometry
+    on divisions.division_area
+    using gist (geometry); 
+
+-- Para ejecutar: psql postgres -f create.sql

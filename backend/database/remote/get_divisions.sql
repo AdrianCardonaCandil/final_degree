@@ -39,16 +39,13 @@ copy (
         class,
         region,
         list_transform (
-            hierarchies,
-            lambda hierarchy: list_transform (
-                hierarchy,
-                lambda entry: struct_pack (
-                    division_id := entry.division_id,
-                    type := entry.subtype,
-                    name := entry.name
-                )
+            hierarchies[1],
+            lambda entry: struct_pack (
+                division_id := entry.division_id,
+                type := entry.subtype,
+                name := entry.name
             )
-        ) as hierarchies,
+        ) as hierarchy,
         parent_division_id as parent_id,
         population,
         capital_division_ids as capitals,
