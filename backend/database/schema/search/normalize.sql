@@ -48,7 +48,7 @@ insert into search.abbreviation (expansion, pattern, priority) values
     ('avenida', '\mav\.(?=\s)|\mavd\.(?=\s)|\mavda\.(?=\s)|\mav\.ª(?=\s)', default),
     ('barrio', '\mbo\.(?=\s)|\mb\.º(?=\s)', default),
     ('bulevar', '\mblvr\.(?=\s)', default),
-    ('calle', '\Ac\.(?=\s)|\Ac/(?=\s)|\mcl\.(?=\s)', default),
+    ('calle', '\mc\.(?=\s)|\mc/(?=\s)|\mcl\.(?=\s)', default),
     ('camino alto', '\mc\.º\s+a\.(?=\s)', 10),
     ('camino bajo', '\mc\.º\s+b\.(?=\s)', 10),
     ('camino viejo', '\mc\.º\s+v\.(?=\s)', 10),

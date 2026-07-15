@@ -75,4 +75,4 @@ copy (
 * datos de la entidad 'DivisionArea'.
 **/
 
--- Para ejecutar: duckdb temp.db < get_divisions.sql
+-- Para ejecutar: duckdb temp.db < divisions.sql

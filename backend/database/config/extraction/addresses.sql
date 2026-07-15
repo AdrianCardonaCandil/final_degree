@@ -49,4 +49,4 @@ copy (
 * filtrando a través de la propiedad 'country'.
 **/
 
--- Para ejecutar: duckdb temp.db < get_addresses.sql
+-- Para ejecutar: duckdb temp.db < addresses.sql

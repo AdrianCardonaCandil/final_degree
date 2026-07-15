@@ -81,4 +81,4 @@ copy (
 * filtrando a través de las direcciones asociadas a cada punto de interés.
 **/
 
--- Para ejecutar: duckdb temp.db < get_places.sql
+-- Para ejecutar: duckdb temp.db < places.sql

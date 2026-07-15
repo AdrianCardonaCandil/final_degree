@@ -51,4 +51,4 @@ copy (
 * filtrando a través de la propiedad 'country'.
 **/
 
--- Para ejecutar: duckdb temp.db < get_division_areas.sql
+-- Para ejecutar: duckdb temp.db < division_areas.sql

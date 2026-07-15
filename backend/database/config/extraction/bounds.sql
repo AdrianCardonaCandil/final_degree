@@ -71,4 +71,4 @@ create or replace table bounds as (
     group by division_id, names.primary
 );
 
--- Para ejecutar: duckdb temp.db < get_bounds.sql
+-- Para ejecutar: duckdb temp.db < bounds.sql

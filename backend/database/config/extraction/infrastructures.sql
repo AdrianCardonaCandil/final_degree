@@ -80,4 +80,4 @@ copy (
 * de la aplicación a través de la propiedad 'class' de cada registro.
 **/
 
--- Para ejecutar: duckdb temp.db < get_infrastructures.sql
+-- Para ejecutar: duckdb temp.db < infrastructures.sql
