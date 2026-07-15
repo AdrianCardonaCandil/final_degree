@@ -45,7 +45,7 @@ create table places.place (
     phones jsonb,
     taxonomy jsonb,
     brand text,
-    addresses jsonb
+    address jsonb
 );
 
 -- Address (Diracción)
@@ -133,4 +133,4 @@ create index if not exists idx_division_area_geometry
     on divisions.division_area
     using gist (geometry); 
 
--- Para ejecutar: psql postgres -f create.sql
+-- Para ejecutar: psql postgres -f definition.sql

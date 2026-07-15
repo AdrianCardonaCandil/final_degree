@@ -55,7 +55,7 @@ copy (
             hierarchy := taxonomy.hierarchy
         ) as taxonomy,
         brand.names.primary as brand,
-        addresses
+        addresses -> 0 as address
     from read_parquet (
         getvariable('base_url') || 'theme=places/type=place/*.parquet'
     )

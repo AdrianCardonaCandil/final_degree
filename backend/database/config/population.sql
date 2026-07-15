@@ -33,8 +33,8 @@ select
     to_json(phones) as phones,
     to_json(taxonomy) as taxonomy,
     brand,
-    to_json(addresses) as addresses
-from read_parquet('../parquet/places.parquet');
+    to_json(address) as address
+from read_parquet('./parquet/places.parquet');
 
 -- Volcado de los datos extraidos de la capa 'addresses' a la base de datos.
 truncate table overture_es.addresses.address;
@@ -49,7 +49,7 @@ select
     street,
     unit,
     to_json(address_levels) as address_levels
-from read_parquet('../parquet/addresses.parquet');
+from read_parquet('./parquet/addresses.parquet');
 
 -- Volcado de los datos extraidos de la capa 'infrastructures' a la base de datos.
 truncate table overture_es.infrastructures.infrastructure;
@@ -64,7 +64,7 @@ select
     height,
     surface,
     to_json(tags) as tags
-from read_parquet('../parquet/infrastructures.parquet');
+from read_parquet('./parquet/infrastructures.parquet');
 
 -- Volcado de los datos extraidos de la capa 'divisions' a la base de datos.
 truncate table overture_es.divisions.division;
@@ -87,7 +87,7 @@ select
     to_json(capital_of) as capital_of,
     to_json(cartography) as cartography,
     wikidata
-from read_parquet('../parquet/divisions.parquet');
+from read_parquet('./parquet/divisions.parquet');
 
 -- Volcado de los datos extraidos de la capa 'division_areas' a la base de datos.
 truncate table overture_es.divisions.division_area;
@@ -103,6 +103,6 @@ select
     division_id,
     country,
     region
-from read_parquet('../parquet/division_areas.parquet');
+from read_parquet('./parquet/division_areas.parquet');
 
--- Para ejecutar: duckdb < populate.sql
+-- Para ejecutar: duckdb < population.sql
