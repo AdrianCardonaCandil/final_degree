@@ -41,6 +41,6 @@ from (
 where a.id = h.id;
 
 -- Limpiamos los registros muertos de la tabla de direcciones tras el update
-vacuum analyze addresses.address;
+vacuum full analyze addresses.address;
 
 -- Para ejecutar: psql overture_es -f search_document.sql

@@ -73,6 +73,6 @@ begin
 end $$;
 
 -- Fase 4: limpiamos los registros muertos de la tabla de direcciones tras el update
-vacuum analyze addresses.address;
+vacuum full analyze addresses.address;
 
 -- Para ejecutar: psql overture_es -f resolve_hierarchy.sql
