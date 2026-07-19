@@ -1,22 +1,21 @@
 /*
-* Este archivo proporciona una amplicación a la tabla 'address' proveyendo dos nuevas
-* columnas:
-*   - Hierarchy: corresponde a la jeraquía territorial del punto donde se encuentra la
-*   división. Ordenada de mayor a menor generalidad, comprende los diferentes tipos de
-*   entes administrativos más tipicos (barrio, localidad, region, etcétera).
-*   - ResolvedType: corresponde al tipo de división administrativa menor con registro
-*   disponible en la tabla 'division' para aportar contexto informativo a una entrada
-*   determinada.
-**/
+ * @file ./database/setup/aggregation/address/hierarchy.sql
+ * @author Adrián Cardona Candil
+ * @brief A spatial enrichment process that calculates and associates the hierarchical political-administrative
+ *        structure of a location with each direction. It operates through a top-down geometric cascade of spatial
+ *        intersections.
+ *
+ * @adds hierarchy {jsonb} - Territorial hierarchy tree (from most general to least general) derived from the
+ *       corresponding administrative division.
+ * @adds resolved_type {text} - The lowest-level administrative division used to determine the location of the
+ *       address (e.g., “neighborhood,” “locality,” etc.).
+ **/
 
--- Fase 0: columnas necesarias (idempotente)
+-- Adds columns to the address table
 alter table addresses.address add column if not exists hierarchy jsonb;
 alter table addresses.address add column if not exists resolved_type text;
 
--- Fase 0: índice espacial necesario para que las intersecciones sean eficientes
--- Generado en el archivo de creación de la base de datos
-
--- Fase 1 y 2: cascada geométrica descendente
+-- Launches the hierarchy resolution process
 do $$
 declare
     levels text[] := array['microhood', 'neighborhood', 'macrohood', 'locality', 'county', 'region'];
@@ -47,7 +46,7 @@ begin
     end loop;
 end $$;
 
--- Fase 3: fallback final a nivel país (con tolerancia geométrica)
+-- Fallback for addresses that couldn't be resolved
 do $$
 declare
     rows_updated integer;
@@ -72,7 +71,5 @@ begin
     raise notice 'Nivel country (fallback): % direcciones resueltas', rows_updated;
 end $$;
 
--- Fase 4: limpiamos los registros muertos de la tabla de direcciones tras el update
+-- Updates statistics and updates the index for better performance
 vacuum full analyze addresses.address;
-
--- Para ejecutar: psql overture_es -f resolve_hierarchy.sql

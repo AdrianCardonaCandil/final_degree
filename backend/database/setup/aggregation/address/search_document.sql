@@ -1,15 +1,22 @@
-/*
-* Construye la columna materializada 'search_document' sobre addresses.address,
-* que concatena y normaliza el texto relevante de cada dirección (columnas planas
-* street/number/postcode + niveles jerárquicos extraídos de 'hierarchy') para su
-* uso posterior en los índices de búsqueda de tipo tsvector/trigram.
-**/
+/**
+ * @file: ./database/setup/aggregation/address/search_document.sql
+ * @author: Adrián Cardona Candil
+ * @brief: Creates and stores the unified plain-text field ‘search_document’
+ *         in the address table. Consolidates the linear address information
+ *         with its resolved administrative divisions to populate the full-text
+ *         search indexes.
+ *
+ * @adds search_document {text} - A standardized textual representation of geographic
+ *       information associated with an address, covering both its inherent characteristics
+ *       and its administrative hierarchy.
+ *
+ * @execution psql overture_es -f search_document.sql
+ */
 
--- Añadimos la columna materializada 'search_document' a la tabla 'addresses.address'.
-alter table addresses.address 
-    add column if not exists search_document text;
+-- Adds column to the address table
+alter table addresses.address add column if not exists search_document text;
 
--- Recalculamos el contenido de la columna para todos los registros de la tabla.
+-- Launches the normalization and search_document creation process
 update addresses.address a
 set search_document = search.normalize_text(
     concat_ws(
@@ -40,7 +47,5 @@ from (
 ) as h
 where a.id = h.id;
 
--- Limpiamos los registros muertos de la tabla de direcciones tras el update
+-- Updates statistics and updates the index for better performance
 vacuum full analyze addresses.address;
-
--- Para ejecutar: psql overture_es -f search_document.sql

@@ -1,19 +1,25 @@
 /*
-* Construye la columna materializada 'search_tsv' sobre addresses.address.
-* Se trata de un vector ponderado (setweight con pesos A-D) combinando las
-* columnas planas (street, number y postcode) con los niveles jersárquicos
-* extraídos del atributo 'hierarchy'. Se usa la siguiente tabla de grupos:
-*   A: street, number
-*   B: postcode, microhood, neighborhood, macrohood
-*   C: locality, county
-*   D: region
-**/
+ * @file ./database/setup/aggregation/address/search_tsv.sql
+ * @author Adrián Cardona Candil
+ * @brief Creates the materialized column ‘search_tsv’ on addresses.address. This is a weighted vector
+ *        (setweight with weights A–D) that combines the flat columns (street, number, and postcode)
+ *        with the hierarchical levels extracted from the ‘hierarchy’ attribute. The following group
+ *        table is used:
+ *        A: street, number
+ *        B: postcode, microhood, neighborhood, macrohood
+ *        C: locality, county
+ *        D: region
+ *
+ * @adds search_tsv {tsvector} - A weighted representation of geographic information associated with an address, 
+ *       coverign both its inherent characteristics and its administrative hierarchy.
+ *
+ * @execution psql overture_es -f search_tsv.sql
+ */
 
--- Añadimos la columna search_tsv a la tabla addresses.address
-alter table addresses.address
-    add column if not exists search_tsv tsvector;
+-- Adds the search_tsv column to the addresses.address table
+alter table addresses.address add column if not exists search_tsv tsvector;
 
--- Recalculamos el vector materializado para todos los registros
+-- Launches the search_tsv update process
 update addresses.address a
 set search_tsv =
     setweight(to_tsvector('simple', search.normalize_text(concat_ws(' ', a.street, a.number))), 'A') ||
@@ -35,7 +41,6 @@ from (
 ) as h
 where a.id = h.id;
 
--- Limpiamos los registros muertos de la tabla de direcciones tras el update
+-- Updates statistics and updates the index for better performance
 vacuum full analyze addresses.address;
 
--- Para ejecutar: psql overture_es -f search_tsv.sql
