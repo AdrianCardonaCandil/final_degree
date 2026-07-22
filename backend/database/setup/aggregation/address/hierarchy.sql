@@ -5,15 +5,11 @@
  *        structure of a location with each direction. It operates through a top-down geometric cascade of spatial
  *        intersections.
  *
- * @adds hierarchy {jsonb} - Territorial hierarchy tree (from most general to least general) derived from the
+ * @updates hierarchy {jsonb} - Territorial hierarchy tree (from most general to least general) derived from the
  *       corresponding administrative division.
- * @adds resolved_type {text} - The lowest-level administrative division used to determine the location of the
+ * @updates resolved_type {text} - The lowest-level administrative division used to determine the location of the
  *       address (e.g., “neighborhood,” “locality,” etc.).
  **/
-
--- Adds columns to the address table
-alter table addresses.address add column if not exists hierarchy jsonb;
-alter table addresses.address add column if not exists resolved_type text;
 
 -- Launches the hierarchy resolution process
 do $$
@@ -22,6 +18,7 @@ declare
     level text;
     rows_updated integer;
 begin
+    -- Iterating through the hierarchy levels from most general to least general.
     foreach level in array levels loop
         execute '
             update addresses.address a

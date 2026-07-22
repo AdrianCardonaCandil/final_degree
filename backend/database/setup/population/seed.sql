@@ -57,7 +57,11 @@ select
     number,
     postcode,
     street,
-    unit
+    unit,
+    null as hierarchy,
+    null as resolved_type,
+    null as search_document,
+    null as search_tsv
 from read_parquet('../extraction/parquet/address.parquet');
 
 /*

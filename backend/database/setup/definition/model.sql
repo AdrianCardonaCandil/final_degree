@@ -68,7 +68,11 @@ create table addresses.address (
     number text,
     postcode text,
     street text,
-    unit text
+    unit text,
+    hierarchy jsonb,
+    resolved_type text,
+    search_document text,
+    search_tsv tsvector
 );
 
 /*

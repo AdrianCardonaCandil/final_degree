@@ -5,24 +5,21 @@
  *        (setweight with weights A–D) that combines the flat columns (street, number, and postcode)
  *        with the hierarchical levels extracted from the ‘hierarchy’ attribute. The following group
  *        table is used:
- *        A: street, number
+ *        A: street, number, unit
  *        B: postcode, microhood, neighborhood, macrohood
  *        C: locality, county
  *        D: region
  *
- * @adds search_tsv {tsvector} - A weighted representation of geographic information associated with an address, 
+ * @updates search_tsv {tsvector} - A weighted representation of geographic information associated with an address, 
  *       coverign both its inherent characteristics and its administrative hierarchy.
  *
  * @execution psql overture_es -f search_tsv.sql
  */
 
--- Adds the search_tsv column to the addresses.address table
-alter table addresses.address add column if not exists search_tsv tsvector;
-
 -- Launches the search_tsv update process
 update addresses.address a
 set search_tsv =
-    setweight(to_tsvector('simple', search.normalize_text(concat_ws(' ', a.street, a.number))), 'A') ||
+    setweight(to_tsvector('simple', search.normalize_text(concat_ws(' ', a.street, a.number, a.unit))), 'A') ||
     setweight(to_tsvector('simple', search.normalize_text(concat_ws(' ', a.postcode, h.microhood, h.neighborhood, h.macrohood))), 'B') ||
     setweight(to_tsvector('simple', search.normalize_text(concat_ws(' ', h.locality, h.county))), 'C') ||
     setweight(to_tsvector('simple', search.normalize_text(h.region)), 'D')

@@ -6,15 +6,12 @@
  *         with its resolved administrative divisions to populate the full-text
  *         search indexes.
  *
- * @adds search_document {text} - A standardized textual representation of geographic
+ * @updates search_document {text} - A standardized textual representation of geographic
  *       information associated with an address, covering both its inherent characteristics
  *       and its administrative hierarchy.
  *
  * @execution psql overture_es -f search_document.sql
  */
-
--- Adds column to the address table
-alter table addresses.address add column if not exists search_document text;
 
 -- Launches the normalization and search_document creation process
 update addresses.address a
@@ -23,6 +20,7 @@ set search_document = search.normalize_text(
         ' ',
         a.street,
         a.number,
+        a.unit,
         a.postcode,
         h.microhood,
         h.neighborhood,
