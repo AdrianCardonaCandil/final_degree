@@ -1,5 +1,5 @@
 /*
- * @file    ./database/suggest.sql
+ * @file    ./database/api/address/suggest.sql
  * @author  Adrián Cardona Candil
  * @brief   Autocomplete (Suggest) endpoint for the address table. Implement the “Suggest” phase of a
  *          Suggest/Retrieve-type address search engine on the “addresses.address” table. Given free-text
@@ -17,11 +17,12 @@
  *     • id [text]: Unique identifier of the address.
  *     • street [text]: Street name.
  *     • number [text]: Street number.
+ *     • unit [text]: Unit number.
  *     • postcode [text]: Postal code.
  *     • hierarchy [jsonb]: Hierarchical structure of the address (microhood, neighordhood, macrohood, locality, etc).
  *     • score [double precision]: Hybrid score (lexical + fuzzy) indicating relevance.
  *
- * @execute psql overture_es -f ./database/suggest.sql
+ * @execute psql overture_es -f ./database/api/address/suggest.sql
  **/
 
 create or replace function addresses.suggest(
@@ -85,6 +86,7 @@ begin
             ad.number,
             ad.unit,
             ad.postcode,
+            ad.country,
             ad.hierarchy,
             ad.search_document,
             ad.search_tsv
@@ -97,6 +99,7 @@ begin
         fa.street,
         fa.number,
         fa.unit,
+        fa.country,
         fa.postcode,
         fa.hierarchy,
         (
