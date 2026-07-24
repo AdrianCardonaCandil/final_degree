@@ -42,7 +42,9 @@ create table if not exists places.place (
     phones jsonb,
     taxonomy jsonb,
     brand text,
-    address jsonb
+    address jsonb,
+    search_document text,
+    search_tsv tsvector
 );
 
 /*

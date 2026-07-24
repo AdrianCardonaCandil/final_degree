@@ -33,6 +33,7 @@ create or replace function addresses.suggest(
     street text,
     number text,
     unit text,
+    country text,
     postcode text,
     hierarchy jsonb,
     score double precision

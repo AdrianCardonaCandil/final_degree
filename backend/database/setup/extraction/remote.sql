@@ -80,7 +80,10 @@ copy (
             hierarchy := taxonomy.hierarchy
         ) as taxonomy,
         brand.names.primary as brand,
-        addresses -> 0 as address
+        struct_pack (
+            "freeform" := addresses -> 0 ->> 'freeform',
+            "postcode" := addresses -> 0 ->> 'postcode'
+        ) as address
     from read_parquet (
         getvariable('base_url') || 'theme=places/type=place/*.parquet'
     )

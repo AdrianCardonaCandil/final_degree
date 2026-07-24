@@ -37,7 +37,9 @@ select
     to_json(phones) as phones,
     to_json(taxonomy) as taxonomy,
     brand,
-    to_json(address) as address
+    to_json(address) as address,
+    null as search_document,
+    null as search_tsv
 from read_parquet('../extraction/parquet/place.parquet');
 
 /*
