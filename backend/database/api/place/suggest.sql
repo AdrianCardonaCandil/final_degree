@@ -37,6 +37,7 @@ create or replace function places.suggest(
 $$
 declare
     lexeme text;
+    signal boolean;
     lexemes text[];
     normalized text;
     candidates text;
@@ -52,9 +53,10 @@ begin
     -- Builing a tsquery while correcting typos.
     valid_typo := '';
     lexemes := regexp_split_to_array(normalized, '\s+');
+    signal := exists (select 1 from unnest(lexemes) l where length(l) > 2);
     for lexeme in select unnest(lexemes)
     loop
-        if length(lexeme) <= 2 and array_position(lexemes, lexeme) > 1 then
+        if length(lexeme) <= 2 and signal then
             continue;
         elsif (select count(*) from places.word_dictionary where word = lexeme) > 0 then
             candidates := lexeme;
