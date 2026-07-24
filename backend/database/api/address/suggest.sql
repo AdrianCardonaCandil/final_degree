@@ -77,8 +77,6 @@ begin
         end if;
         valid_typo := valid_typo || candidates || ' & ';
     end loop;
-
-    raise notice 'Valid typo: %', valid_typo;
     
     valid_typo := substring(valid_typo, 1, length(valid_typo) - 3);
     valid_typo := regexp_replace(valid_typo, '(\w+)(?=[^&]*$)', '\1:*', 'g');
